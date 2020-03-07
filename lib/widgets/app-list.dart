@@ -17,14 +17,13 @@ class AppListWidget extends StatefulWidget {
 }
 
 class _AppListWidgetState extends State<AppListWidget> {
-  List<Application> apps;
+  List<Application> _apps;
   FavoriteApps _favoriteProvider;
   AppList _appListProvider;
 
   @override
   void initState() {
     super.initState();
-//    _init();
   }
 
   void _openApplication(Application app) {
@@ -43,50 +42,65 @@ class _AppListWidgetState extends State<AppListWidget> {
     return route ?? false;
   }
 
+  init() async {
+    final res = await _appListProvider.loadApps();
+    setState(() {
+      _apps = res;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _favoriteProvider = Provider.of<FavoriteApps>(context);
     _appListProvider = Provider.of<AppList>(context);
+    _apps = _appListProvider.apps;
+    if (_apps.length == 0) init();
 
     return WillPopScope(
       onWillPop: _returnBackScreen,
       child: SwipeDetector(
-        onSwipeDown: () async {
-          await _returnBackScreen();
+        onSwipeDown: () {
+          _returnBackScreen();
         },
         child: Container(
+          margin: EdgeInsets.only(top: 18.0),
           color: Theme.of(context).backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: _appListProvider.apps == null || _appListProvider.apps.length == 0
+          child: _apps == null
               ? Container(
                   color: Theme.of(context).backgroundColor,
+                  child: Center(
+                    child: Text(
+                      'Loading...',
+                      style: Theme.of(context).textTheme.headline,
+                    ),
+                  ),
                 )
-              : ListView.builder(
-                  itemCount: _appListProvider.apps.length,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return new GestureDetector(
-                      onTap: () =>
-                          _openApplication(_appListProvider.apps[index]),
-                      onLongPress: () =>
-                          _addToFavorite(_appListProvider.apps[index]),
-                      child: Container(
-                          child: Text(
-                        _appListProvider.apps[index].appName,
-                        style: Theme.of(context).textTheme.headline,
-                      )),
-                    );
-                  }),
+              : NotificationListener(
+                  onNotification: (OverscrollIndicatorNotification overscroll) {
+                    overscroll.disallowGlow();
+//                    _returnBackScreen();
+                    return true;
+                  },
+                  child: ListView.builder(
+                      itemCount: _apps.length,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return new GestureDetector(
+                          onTap: () => _openApplication(_apps[index]),
+                          onLongPress: () => _addToFavorite(_apps[index]),
+                          child: Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              child: Text(
+                                _apps[index].appName,
+                                style: Theme.of(context).textTheme.headline,
+                              )),
+                        );
+                      }),
+                ),
         ),
       ),
     );
-  }
-
-  _init() async {
-    var appList = await _getAppList();
-    setState(() {
-      apps = appList;
-    });
   }
 
   _getAppList() async {

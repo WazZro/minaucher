@@ -20,11 +20,21 @@ class SwipeDetector extends StatefulWidget {
 }
 
 class _SwipeDetectorState extends State<SwipeDetector> {
+  //Vertical swipe configuration options
+  final verticalSwipeMaxWidthThreshold = 50.0;
+  final verticalSwipeMinDisplacement = 100.0;
+  final verticalSwipeMinVelocity = 300.0;
+
+  //Horizontal swipe configuration options
+  final horizontalSwipeMaxHeightThreshold = 50.0;
+  final horizontalSwipeMinDisplacement = 100.0;
+  final horizontalSwipeMinVelocity = 300.0;
+
   // Vertical drag details
   DragStartDetails _startVerticalDragDetails;
   DragUpdateDetails _updateVerticalDragDetails;
 
-  // Horizontal drag detailes
+  // Horizontal drag details
   DragStartDetails _startHorizontalDragDetails;
   DragUpdateDetails _updateHorizontalDragDetails;
 
@@ -38,6 +48,11 @@ class _SwipeDetectorState extends State<SwipeDetector> {
     //Convert values to be positive
     if (dx < 0) dx = -dx;
     if (dy < 0) dy = -dy;
+    double positiveVelocity = velocity < 0 ? -velocity : velocity;
+
+    if (dx > verticalSwipeMaxWidthThreshold) return;
+    if (dy < verticalSwipeMinDisplacement) return;
+    if (positiveVelocity < verticalSwipeMinVelocity) return;
 
     if (velocity < 0) {
       if (widget.onSwipeUp != null) widget.onSwipeUp();
@@ -56,6 +71,11 @@ class _SwipeDetectorState extends State<SwipeDetector> {
     //Convert values to be positive
     if (dx < 0) dx = -dx;
     if (dy < 0) dy = -dy;
+    double positiveVelocity = velocity < 0 ? -velocity : velocity;
+
+    if (dx < horizontalSwipeMinDisplacement) return;
+    if (dy > horizontalSwipeMaxHeightThreshold) return;
+    if (positiveVelocity < horizontalSwipeMinVelocity) return;
 
     if (velocity < 0) {
       if (widget.onSwipeRight != null) widget.onSwipeRight();
