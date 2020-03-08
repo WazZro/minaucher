@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:launcher/constants.dart';
 import 'package:launcher/models/AppList.dart';
 import 'package:launcher/models/FavoriteApp.dart';
 import 'package:launcher/themes/themes.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Minaucher',
+        title: APPLICATION_TITLE,
         theme: lightTheme,
         darkTheme: dartTheme,
         initialRoute: '/main',
