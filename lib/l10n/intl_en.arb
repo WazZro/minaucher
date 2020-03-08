@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-03-08T22:55:06.203406",
+  "selectFavorite": "Select favorite application",
+  "@selectFavorite": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectRightSwipe": "Select right swipe",
+  "@selectRightSwipe": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectLeftSwipe": "Select left swipe",
+  "@selectLeftSwipe": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  }
+}

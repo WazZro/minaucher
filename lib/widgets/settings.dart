@@ -1,6 +1,7 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:launcher/locales.dart';
 import 'package:launcher/models/FavoriteApp.dart';
 import 'package:launcher/models/SwipeApps.dart';
 import 'package:launcher/widgets/select-app-list.dart';
@@ -44,7 +45,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 child: Container(
                   margin: margin,
                   child: Text(
-                    'Select favorite app',
+                    CustomLocalization.of(context).selectFavorite,
                     style: Theme.of(context).textTheme.body1,
                   ),
                 ),
@@ -62,7 +63,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 child: Container(
                   margin: margin,
                   child: Text(
-                    'Select left swipe',
+                    CustomLocalization.of(context).selectLeftSwipe,
                     style: Theme.of(context).textTheme.body1,
                   ),
                 ),
@@ -80,7 +81,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 child: Container(
                   margin: margin,
                   child: Text(
-                    'Select right swipe',
+                    CustomLocalization.of(context).selectRightSwipe,
                     style: Theme.of(context).textTheme.body1,
                   ),
                 ),

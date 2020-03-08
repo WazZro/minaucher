@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-03-08T22:55:06.203406",
+  "selectFavorite": "Выбрать избранное",
+  "@selectFavorite": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectRightSwipe": "Выбрать свайп вправо",
+  "@selectRightSwipe": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectLeftSwipe": "Выбрать свайп влево",
+  "@selectLeftSwipe": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  }
+}

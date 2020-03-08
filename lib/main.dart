@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:launcher/constants.dart';
+import 'package:launcher/locales.dart';
 import 'package:launcher/models/AppList.dart';
 import 'package:launcher/models/FavoriteApp.dart';
 import 'package:launcher/themes/themes.dart';
@@ -8,6 +10,7 @@ import 'package:launcher/widgets/app-list.dart';
 import 'package:launcher/widgets/main.dart';
 import 'package:launcher/widgets/settings.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'models/SwipeApps.dart';
 
@@ -46,6 +49,15 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: dartTheme,
         initialRoute: '/main',
+        localizationsDelegates: [
+          const CustomLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          RUSSIAN_LOCALE,
+          ENGLISH_LOCALE,
+        ],
         routes: {
           MainMenuWidget.ROUTE_NAME: (ctx) =>
               getAnnotated(ctx, MainMenuWidget()),
