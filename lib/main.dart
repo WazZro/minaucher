@@ -10,21 +10,34 @@ import 'package:provider/provider.dart';
 
 import 'models/SwipeApps.dart';
 
-void main() => runApp(MyApp());
+final appList = new AppList();
+final favoritesApp = new FavoriteApps();
+final swipeApps = new SwipeApps();
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(new FutureBuilder(
+      future: Future.wait<dynamic>([
+        appList.loadApps(),
+        favoritesApp.load(),
+        swipeApps.load(),
+      ]),
+      builder: (ctx, snapshot) => snapshot.hasData ? MyApp() : Container()));
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppList>(
-          create: (ctx) => AppList(),
+        ChangeNotifierProvider<AppList>.value(
+          value: appList,
         ),
-        ChangeNotifierProvider<FavoriteApps>(
-          create: (ctx) => FavoriteApps(),
+        ChangeNotifierProvider<FavoriteApps>.value(
+          value: favoritesApp,
         ),
-        ChangeNotifierProvider<SwipeApps>(
-          create: (ctx) => SwipeApps(),
+        ChangeNotifierProvider<SwipeApps>.value(
+          value: swipeApps,
         )
       ],
       child: MaterialApp(

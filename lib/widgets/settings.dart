@@ -21,68 +21,72 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget build(BuildContext context) {
     _favoriteApps = Provider.of<FavoriteApps>(context);
     _swipeApps = Provider.of<SwipeApps>(context);
+    const margin = EdgeInsets.only(bottom: 12.0);
 
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.only(top: 24.0),
+        padding: const EdgeInsets.only(top: 24.0),
         color: Theme.of(context).backgroundColor,
-        child: Column(
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SelectAppListWidget(onTapAction: (Application app) {
-                              _favoriteApps.add(app);
-                            })));
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 12.0),
-                child: Text(
-                  'Select favorite app',
-                  style: Theme.of(context).textTheme.body1,
+        child: GestureDetector(
+          onDoubleTap: () => Navigator.of(context).pop(),
+          child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectAppListWidget(
+                                  onTapAction: (Application app) {
+                                _favoriteApps.add(app);
+                              })));
+                },
+                child: Container(
+                  margin: margin,
+                  child: Text(
+                    'Select favorite app',
+                    style: Theme.of(context).textTheme.body1,
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SelectAppListWidget(onTapAction: (Application app) {
-                              _swipeApps.setLeftSwipe(app);
-                            })));
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 12.0),
-                child: Text(
-                  'Select left swipe',
-                  style: Theme.of(context).textTheme.body1,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectAppListWidget(
+                                  onTapAction: (Application app) {
+                                _swipeApps.setLeftSwipe(app);
+                              })));
+                },
+                child: Container(
+                  margin: margin,
+                  child: Text(
+                    'Select left swipe',
+                    style: Theme.of(context).textTheme.body1,
+                  ),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SelectAppListWidget(onTapAction: (Application app) {
-                              _swipeApps.setRightSwipe(app);
-                            })));
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 12.0),
-                child: Text(
-                  'Select right swipe',
-                  style: Theme.of(context).textTheme.body1,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectAppListWidget(
+                                  onTapAction: (Application app) {
+                                _swipeApps.setRightSwipe(app);
+                              })));
+                },
+                child: Container(
+                  margin: margin,
+                  child: Text(
+                    'Select right swipe',
+                    style: Theme.of(context).textTheme.body1,
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

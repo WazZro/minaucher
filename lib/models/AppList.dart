@@ -8,10 +8,6 @@ class AppList extends ChangeNotifier {
 
   UnmodifiableListView<Application> get apps => UnmodifiableListView(_apps.toList());
 
-  AppList() {
-    loadApps();
-  }
-
   loadApps() async {
     final appList = await DeviceApps.getInstalledApplications(
       includeAppIcons: false,

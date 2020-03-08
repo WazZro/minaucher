@@ -14,9 +14,6 @@ class SwipeApps extends ChangeNotifier {
 
   Application get leftSwipeApplication => _leftApplication;
 
-  SwipeApps() {
-    load();
-  }
 
   void setRightSwipe(Application application) {
     _rightApplication = application;
@@ -39,7 +36,7 @@ class SwipeApps extends ChangeNotifier {
     await LocalPersistence.save(PERSISTENCE_KEY, serialized);
   }
 
-  void load() async {
+  Future<void> load() async {
     final result = await LocalPersistence.get(PERSISTENCE_KEY);
 
     if (result == null) return;

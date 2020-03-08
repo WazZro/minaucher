@@ -13,13 +13,11 @@ class FavoriteApps extends ChangeNotifier {
   UnmodifiableListView<Application> get favorites =>
       UnmodifiableListView(_favorites.toList());
 
-  FavoriteApps() {
-    _load();
-  }
-
-  void _load() async {
+  Future<List<Application>> load() async {
     final apps = await LocalPersistence.getFavorites(FAVORITE_PERSISTENCE_KEY);
     apps.forEach((app) => _favorites.add(app));
+
+    return favorites;
   }
 
   void _save() async {
