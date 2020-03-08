@@ -7,6 +7,7 @@ import 'package:launcher/models/SwipeApps.dart';
 import 'package:launcher/widgets/app-list.dart';
 import 'package:launcher/widgets/settings.dart';
 import 'package:launcher/widgets/swipe-detector.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class MainMenuWidget extends StatefulWidget {
@@ -21,7 +22,6 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
       const MethodChannel('com.wazzro.launcher/search');
   static const METHOD_NAME = 'launchSearchActivity';
 
-  FavoriteApps _favoriteProvider;
   SwipeApps _swipeAppsProvider;
 
   void openApplication(Application app) {
@@ -30,23 +30,22 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-//    _favoriteProvider = Provider.of<FavoriteApps>(context);
     _swipeAppsProvider = Provider.of<SwipeApps>(context);
 
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
-        onDoubleTap: () =>
-            Navigator.of(context).pushNamed(SettingWidget.ROUTE_NAME),
+        onDoubleTap: () => Navigator.of(context).push(PageTransition(
+          type: PageTransitionType.fade,
+          child: SettingWidget(),
+        )),
         child: SwipeDetector(
           onSwipeUp: () {
-            Navigator.of(context).pushNamed(AppListWidget.ROUTE_NAME);
+            Navigator.of(context).push(PageTransition(
+              type: PageTransitionType.downToUp,
+              child: AppListWidget(),
+            ));
           },
           onSwipeDown: () => _openWebSearch(),
           onSwipeLeft: () {
@@ -59,7 +58,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             backgroundColor: Theme.of(context).backgroundColor,
             body: SafeArea(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 32.0, vertical: 200.0),
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 32.0, vertical: 200.0),
                 child: Center(
                   child: Consumer<FavoriteApps>(
                     builder: (context, favorites, child) => ListView.builder(
@@ -67,12 +67,12 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
-                              onTap: () => openApplication(
-                                  favorites.favorites[index]),
-                              onLongPress: () => favorites
-                                  .delete(favorites.favorites[index]),
+                              onTap: () =>
+                                  openApplication(favorites.favorites[index]),
+                              onLongPress: () =>
+                                  favorites.delete(favorites.favorites[index]),
                               child: Container(
-                                margin: EdgeInsets.only(bottom: 12.0),
+                                margin: const EdgeInsets.only(bottom: 12.0),
                                 child: Text(
                                   favorites.favorites[index].appName,
                                   style: Theme.of(context).textTheme.headline,
