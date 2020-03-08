@@ -36,7 +36,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _favoriteProvider = Provider.of<FavoriteApps>(context);
+//    _favoriteProvider = Provider.of<FavoriteApps>(context);
     _swipeAppsProvider = Provider.of<SwipeApps>(context);
 
     return WillPopScope(
@@ -48,10 +48,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
           onSwipeUp: () {
             Navigator.of(context).pushNamed(AppListWidget.ROUTE_NAME);
           },
-          onSwipeDown: () {
-//            _launchGoogle();
-            platformChannel.invokeMethod(METHOD_NAME);
-          },
+          onSwipeDown: () => _openWebSearch(),
           onSwipeLeft: () {
             openApplication(_swipeAppsProvider.leftSwipeApplication);
           },
@@ -64,23 +61,25 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 32.0, vertical: 200.0),
                 child: Center(
-                  child: ListView.builder(
-                      itemCount: _favoriteProvider.favorites.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                            onTap: () => openApplication(
-                                _favoriteProvider.favorites[index]),
-                            onLongPress: () => _favoriteProvider
-                                .delete(_favoriteProvider.favorites[index]),
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 12.0),
-                              child: Text(
-                                _favoriteProvider.favorites[index].appName,
-                                style: Theme.of(context).textTheme.headline,
-                              ),
-                            ));
-                      }),
+                  child: Consumer<FavoriteApps>(
+                    builder: (context, favorites, child) => ListView.builder(
+                        itemCount: favorites.favorites.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                              onTap: () => openApplication(
+                                  favorites.favorites[index]),
+                              onLongPress: () => favorites
+                                  .delete(favorites.favorites[index]),
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 12.0),
+                                child: Text(
+                                  favorites.favorites[index].appName,
+                                  style: Theme.of(context).textTheme.headline,
+                                ),
+                              ));
+                        }),
+                  ),
                 ),
               ),
             ),
@@ -88,5 +87,9 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
         ),
       ),
     );
+  }
+
+  _openWebSearch() {
+    platformChannel.invokeMethod(METHOD_NAME);
   }
 }

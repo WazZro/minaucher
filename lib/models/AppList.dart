@@ -1,7 +1,16 @@
-import 'package:device_apps/device_apps.dart';
+import 'dart:collection';
 
-class AppList {
-  final List<Application> apps = [];
+import 'package:device_apps/device_apps.dart';
+import 'package:flutter/widgets.dart';
+
+class AppList extends ChangeNotifier {
+  final Set<Application> _apps = new Set();
+
+  UnmodifiableListView<Application> get apps => UnmodifiableListView(_apps.toList());
+
+  AppList() {
+    loadApps();
+  }
 
   loadApps() async {
     final appList = await DeviceApps.getInstalledApplications(
@@ -11,8 +20,9 @@ class AppList {
     );
 
     appList.sort((a, b) => a.appName.compareTo(b.appName));
-    appList.forEach((app) => apps.add(app));
+    _apps.clear();
+    _apps.addAll(appList);
 
-    return appList;
+    notifyListeners();
   }
 }

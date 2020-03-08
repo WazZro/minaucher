@@ -41,7 +41,6 @@ class _SelectAppListWidgetState extends State<SelectAppListWidget> {
   Widget build(BuildContext context) {
     _appListProvider = Provider.of<AppList>(context);
     _apps = _appListProvider.apps;
-    if (_apps.length == 0) init();
 
     return WillPopScope(
       onWillPop: _returnBackScreen,
@@ -63,22 +62,27 @@ class _SelectAppListWidgetState extends State<SelectAppListWidget> {
                   overscroll.disallowGlow();
                   return true;
                 },
-                child: ListView.builder(
-                    itemCount: _apps.length,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return new GestureDetector(
-                        onTap: () {
-                          widget.onTapAction(_apps[index]);
-                          _returnBackScreen();
-                        },
-                        child: Container(
-                            child: Text(
-                          _apps[index].appName,
-                          style: Theme.of(context).textTheme.headline,
-                        )),
-                      );
-                    }),
+                child: Consumer<AppList>(
+                  builder: (context, appList, child) {
+                    appList.loadApps();
+                    return ListView.builder(
+                        itemCount: appList.apps.length,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return new GestureDetector(
+                            onTap: () {
+                              widget.onTapAction(appList.apps[index]);
+                              _returnBackScreen();
+                            },
+                            child: Container(
+                                child: Text(
+                              appList.apps[index].appName,
+                              style: Theme.of(context).textTheme.headline,
+                            )),
+                          );
+                        });
+                  },
+                ),
               ),
       ),
     );
