@@ -22,3 +22,8 @@ jobs:
       - run: flutter pub get
      # - run: flutter test
       - run: flutter build apk
+      - name: upload artifects
+        uses: actions/upload-artifact@master
+        with:
+          name: minaucher
+          path: build/app/outputs
